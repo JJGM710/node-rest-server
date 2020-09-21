@@ -18,7 +18,7 @@ const borrarArchivo = (nombreImagen, tipo) => {
 const imagenProducto = (id, res, nombreArchivo) => {
 	Producto.findById(id, (err, productoDB) => {
 		if (err) {
-			borrarArchivo(nombreArchivo, 'usuarios');
+			borrarArchivo(nombreArchivo, 'productos');
 			return res.status(500).json({
 				ok: false,
 				err,
@@ -26,7 +26,7 @@ const imagenProducto = (id, res, nombreArchivo) => {
 		}
 
 		if (!productoDB) {
-			borrarArchivo(nombreArchivo, 'usuarios');
+			borrarArchivo(nombreArchivo, 'productos');
 			return res.status(400).json({
 				ok: false,
 				err,
