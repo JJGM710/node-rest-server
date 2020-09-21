@@ -39,3 +39,5 @@ if (process.env.NODE_ENV === 'dev') {
 }
 
 process.env.URLDB = urlDB;
+
+//mongodb+srv://superu:superu@cluster1.jjc5c.mongodb.net/cafe?retryWrites=true&w=majority
