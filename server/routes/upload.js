@@ -6,11 +6,12 @@ const path = require('path');
 const Usuario = require('../models/usuario');
 const Producto = require('../models/producto');
 
-const {
-	imagenProducto,
-	imagenUsuario,
-	borrarArchivo,
-} = require('../helpers/uploadImage');
+// const {
+// 	imagenProducto,
+// 	imagenUsuario,
+// 	borrarArchivo,
+// } = require('../helpers/uploadImage');
+
 app.use(fileUpload());
 
 app.put('/upload/:tipo/:id', function (req, res) {
