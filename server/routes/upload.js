@@ -81,14 +81,89 @@ app.put('/upload/:tipo/:id', function (req, res) {
 			});
 
 		//*cargada en la carpeta
-		if (tipo === 'usuarios') {
-			imagenUsuario(id, res, nombreArchivo);
-		}
+		// if (tipo === 'usuarios') {
+		// 	imagenUsuario(id, res, nombreArchivo);
+		// }
 
-		if (tipo === 'productos') {
-			imagenProducto(id, res, nombreArchivo);
-		}
+		// if (tipo === 'productos') {
+		// 	imagenProducto(id, res, nombreArchivo);
+		// }
 	});
+
+	// const borrarArchivo = (nombreImagen, tipo) => {
+	// 	let pathUrl = path.resolve(
+	// 		__dirname,
+	// 		`../../uploads/${tipo}/${nombreImagen}`
+	// 	);
+
+	// 	//borra una imagen
+	// 	if (fs.existsSync(pathUrl)) {
+	// 		fs.unlinkSync(pathUrl);
+	// 	}
+
+	let pathUrl = path.resolve(
+		__dirname,
+		`../../uploads/${tipo}/${nombreArchivo}`
+	);
+	// SEND FILE TO CLOUDINARY
+	const cloudinary = require('cloudinary').v2;
+	cloudinary.config({
+		cloud_name: 'hadesdev',
+		api_key: '863213963382967',
+		api_secret: 'yB22qLtqLepYwXm2O6x_0wjLkFM',
+	});
+
+	// const path = req.file.path
+	const uniqueFilename = new Date().toISOString();
+
+	const imagenUser = (id, image) => {
+		Usuario.findById(id, (err, usuarioDB) => {
+			if (err) {
+				return res.status(500).json({
+					ok: false,
+					err,
+				});
+			}
+
+			//borra el archivo existente en Cloudinary
+
+			if (usuarioDB?.img) {
+				let public_id = usuarioDB.img.publicId;
+
+				cloudinary.uploader.destroy(public_id, function (error, result) {
+					console.log(result);
+				});
+			}
+
+			usuarioDB.img.publicId = image.public_id;
+			usuarioDB.img.url = image.url;
+
+			usuarioDB.save((err, usuarioSave) => {
+				if (err) {
+					return res.status(500).json({
+						ok: false,
+						err,
+					});
+				}
+
+				// console.log(usuarioSave);
+			});
+		});
+	};
+
+	cloudinary.uploader.upload(
+		pathUrl,
+		{ public_id: `blog/${uniqueFilename}`, tags: `blog` }, // directory and tags are optional
+		function (err, image) {
+			if (err) return res.send(err);
+			console.log('file uploaded to Cloudinary');
+			fs.unlinkSync(pathUrl);
+			// console.log(image);
+			// return image details
+			imagenUser(id, image);
+			res.json(image);
+		}
+	);
 });
 
 module.exports = app;

@@ -76,7 +76,6 @@ const imagenUsuario = (id, res, nombreArchivo) => {
 		borrarArchivo(usuarioDB.img, 'usuarios');
 
 		usuarioDB.img = nombreArchivo;
-
 		usuarioDB.save((err, usuarioSave) => {
 			if (err) {
 				return res.status(500).json({

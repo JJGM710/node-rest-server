@@ -23,8 +23,8 @@ let usuarioSchema = new Schema({
 		required: [true, 'La contrasena es requerida'],
 	},
 	img: {
-		type: String,
-		required: false,
+		publicId: String,
+		url: String,
 	},
 	role: {
 		type: String,
